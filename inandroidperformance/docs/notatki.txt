@@ -1,0 +1,76 @@
+Android Profiler - Szukanie źródła niewydajnego kodu.
+
+------
+Pominięte klatki Info/„Choreographer” w logcat’cie.
+
+------
+https://developer.android.com/studio/profile/record-traces#configurations
+
+Sposoby rejestrowania aktywności CPU:
+- Sampled (Method Trace) -> Rejestruje wywołania metod w sposób próbkujący. Domyślnie próbkowanie wynosi 1 ms. Wyłania, które trwają poniżej czasu próbkowania mogą być pominięte.
+
+- System Trace -> Rejestruje jak aplikacja współdziała z systemem. Przydatne do wykrywania utraty płynności interfejsu użytkownika.
+
+- Instrumented Recording (Method Trace) -> Rejestruje wywołania wszystkich metod. Wadą jest to, że rejestruje informacje, które niekoniecznie są istotne. Przeglądanie zarejestrowanych danych dużo bardziej obciąża AS.
+
+-------
+https://developer.android.com/studio/profile/cpu-profiler
+
+W "System Trace" aktywność wątków jest opisana trzema kolorami:
+- zielony -> wątek aktywny lub gotowy do wykorzystania CPU.
+
+- żółty -> Wątek aktywny ale czeka na operację wejścia/wyjścia.
+
+- szary -> Wątek jest uśpiony i nie używa CPU.
+
+-------
+https://developer.android.com/studio/profile/jank-detection#jank-detection-android-10-lower
+
+JANK - Spadek płynności działania interfejsu użytkownika. Aplikacje powinny osiągać płynność conajmniej 60 klatek na sekundę. Jank można opisać jako "chrupanie" interfejsu użytkownika.
+
+Sekcja "Display":
+- FRAMES -> Pokazują zdarzenia wątku głównego oraz wątku RenderThread. Zdarzenia trwające dłużej niż 16 ms są zaznaczone na czerwono.
+
+- Pozostałe elementy są nieistotne
+
+Sekcja "Threads":	
+- Wątek główny -> jest odpowiedzialny za animacje, pokazania layoutu, rysowanie itp.
+
+- RenderThread -> jest odpowiedzialny za wysyłanie komend rysujących do GPU.
+
+----
+Inspekcja śladów
+https://developer.android.com/studio/profile/inspect-traces
+
+- Call Chart -> Graficzna reprezentacja wywołania metod. Na wykresie w poziomie znajduje się czas, a w pionie wywołania metod. 
+ŻÓłTE bloki oznaczają zapytania do API systemowego. 
+ZIELONE bloki oznaczają własne metody aplikacji. 
+NIEBIESKIE bloki oznaczają zapytania do zewnętrznych API.
+
+------
+Diagnostyka i naprawianie janków
+https://developer.android.com/topic/performance/vitals/render
+
+- Wizualna identyfikacja janków -> Uruchomienie aplikacji i ręczne przejście po ekranach. Rekomendowane jest zrobienie tego na wersji release. Włączenie w opcjach programisty wykresu słupkowego GPU (Profile GPU Rendering).
+
+- System Trace -> Komponenty takie jak RecyclerView zawierają wbudowane markery więc linia czasu pokazuje gdy ich metody są wykonywane. Jeśli systrace nie zapewni wystarczająco dużo informacji o źródle janków należy użyć Sampled method tracing lub instrumented method tracing. Jest to dobre podejście do zidentyfikowania metod zabierających najwięcej czasu CPU. Po zidentyfikowaniu podejrzanych metod dodać własne markery i uruchomić systrace ponownie aby zweryfikować czy te metody są źródłem janków.
+
+Samo renderowanie przebiega w dwóch fazach:
+- Record View#draw() -> na wątku głównym. Wywołuje View#draw(Canvas) z każdym unieważnieniem widoku.
+- DrawFrame -> na wątku RenderThread. Pracuje na danych wygenerowanych przez Record View#draw
+
+------
+Profilowanie renderingu. Histogram
+https://developer.android.com/topic/performance/rendering/inspect-gpu-rendering#profile_rendering
+
+- Pomarańczowy -> Reprezentuje czas spędzony przez CPU na czekaniu na GPU aż skończy pracę. Jeśli słupek jest wysoki to aplikacja wykonuje za dużo pracy na GPU.
+- Czerwony -> Reprezentuje czas spędzony przez moduł renderujący 2D systemu Android na wysyłanie poleceń do OpenGL.
+- Jasny Niebieski -> Reprezentuje czas spędzony na ładowaniu bitmap do GPU.
+- Ciemny Niebieski -> Reprezentuje czas spędzony na tworzeniu i aktualizacji widoków. Jeśli ta część jest wysoka to oznacza, że aplikacja wykonuje dużo rysowania niestandardowych widoków w metodach *.onDraw(...).
+- Najjaśniejszy Zielony -> Represents the amount of time spent on onLayout and onMeasure callbacks in the view hierarchy. A large segment indicates that the view hierarchy is taking a long time to process.
+- Średni Zielony -> Reprezentuje czas potrzebny do oceny wszystkich animatorów uruchomionych dla tej ramki i obsługi wszystkich wywołań zwrotnych wejściowych. Jeśli ten segment jest duży, może to oznaczać, że niestandardowy animator lub wejściowe wywołanie zwrotne spędza zbyt dużo czasu na przetwarzaniu. Wiązanie widoku podczas przewijania, takie jak RecyclerView.Adapter.onBindViewHolder(), również zwykle występuje podczas tego segmentu i jest częstszym źródłem spowolnień w tym segmencie.
+- Najciemniejszy Zielony - Reprezentuje czas, jaki aplikacja spędza na wykonywaniu operacji między dwiema kolejnymi ramkami. Może to wskazywać na zbyt duże przetwarzanie w wątku interfejsu użytkownika, które można przenieść do innego wątku.
+
+------
+Custom systrace markers
+https://developer.android.com/topic/performance/tracing/custom-events

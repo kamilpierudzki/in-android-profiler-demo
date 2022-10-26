@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ConstraintLayoutActivity">
+
+    <View
+        android:id="@+id/cl_1_2"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/n_1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cl_2_2" />
+
+    <View
+        android:id="@+id/cl_2_2"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/n_2"
+        app:layout_constraintBottom_toTopOf="@id/cl_1_2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/cl_3_2"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/cl_3_2"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/n_3"
+        app:layout_constraintBottom_toTopOf="@id/cl_1_2"
+        app:layout_constraintEnd_toStartOf="@id/cl_2_2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cl_4_2" />
+
+    <View
+        android:id="@+id/cl_4_2"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/n_4"
+        app:layout_constraintBottom_toTopOf="@id/cl_3_2"
+        app:layout_constraintEnd_toStartOf="@id/cl_2_2"
+        app:layout_constraintStart_toEndOf="@id/cl_5_2"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/cl_5_2"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/n_5"
+        app:layout_constraintBottom_toTopOf="@id/cl_3_2"
+        app:layout_constraintEnd_toStartOf="@id/cl_4_2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cl_6_2" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_6_2"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/n_6"
+        app:layout_constraintBottom_toTopOf="@id/cl_5_2"
+        app:layout_constraintEnd_toStartOf="@id/cl_4_2"
+        app:layout_constraintStart_toEndOf="@id/cl_7_2"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/cl_7_2"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/n_7"
+        app:layout_constraintBottom_toTopOf="@id/cl_5_2"
+        app:layout_constraintEnd_toStartOf="@id/cl_6_2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cl_8_2" />
+
+    <View
+        android:id="@+id/cl_8_1"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/n_9"
+        app:layout_constraintBottom_toTopOf="@id/cl_7_2"
+        app:layout_constraintEnd_toStartOf="@id/cl_8_2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cl_9_1" />
+
+    <View
+        android:id="@+id/cl_8_2"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/n_8"
+        app:layout_constraintBottom_toTopOf="@id/cl_7_2"
+        app:layout_constraintEnd_toStartOf="@id/cl_6_2"
+        app:layout_constraintStart_toEndOf="@id/cl_8_1"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/cl_9_1"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/n_10"
+        app:layout_constraintBottom_toTopOf="@id/cl_8_1"
+        app:layout_constraintEnd_toStartOf="@id/cl_8_2"
+        app:layout_constraintStart_toEndOf="@id/cl_10_1"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/cl_10_1"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/n_11"
+        app:layout_constraintBottom_toTopOf="@id/cl_8_1"
+        app:layout_constraintEnd_toStartOf="@id/cl_9_1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
